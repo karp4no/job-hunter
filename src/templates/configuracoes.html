@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Meu perfil - Job Hunter</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+<body>
+
+    <main class="form-page">
+
+        <div class="form-container">
+
+            <a href="/" class="back-link">
+                ← Voltar para o dashboard
+            </a>
+
+
+            <div class="form-header">
+
+                <span class="form-icon">⚙️</span>
+
+                <div>
+
+                    <h1>Meu perfil profissional</h1>
+
+                    <p>
+                        Essas informações serão usadas para analisar
+                        sua compatibilidade com as vagas.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form method="POST" class="job-form">
+
+
+                <div class="form-group">
+
+                    <label for="nome">
+                        Nome
+                    </label>
+
+                    <input
+                        type="text"
+                        id="nome"
+                        name="nome"
+                        value="{{ perfil.nome if perfil else '' }}"
+                        placeholder="Ex: Rodrigo"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="formacao">
+                        Formação
+                    </label>
+
+                    <input
+                        type="text"
+                        id="formacao"
+                        name="formacao"
+                        value="{{ perfil.formacao if perfil else '' }}"
+                        placeholder="Ex: Ciência da Computação"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="habilidades">
+                        Habilidades
+                    </label>
+
+                    <input
+                        type="text"
+                        id="habilidades"
+                        name="habilidades"
+                        value="{{ perfil.habilidades if perfil else '' }}"
+                        placeholder="Ex: Python, SQL, Git, HTML, CSS"
+                        required
+                    >
+
+                    <small>
+                        Separe as habilidades por vírgulas.
+                    </small>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="experiencia">
+                        Experiência
+                    </label>
+
+                    <textarea
+                        id="experiencia"
+                        name="experiencia"
+                        rows="5"
+                        placeholder="Descreva experiências profissionais, acadêmicas ou projetos pessoais."
+                    >{{ perfil.experiencia if perfil else '' }}</textarea>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="objetivo">
+                        Objetivo profissional
+                    </label>
+
+                    <textarea
+                        id="objetivo"
+                        name="objetivo"
+                        rows="4"
+                        placeholder="Ex: Busco minha primeira oportunidade como desenvolvedor Python."
+                    >{{ perfil.objetivo if perfil else '' }}</textarea>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="form-submit"
+                >
+                    Salvar perfil
+                </button>
+
+
+            </form>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>

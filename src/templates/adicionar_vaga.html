@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Adicionar vaga - Job Hunter</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body>
+
+    <main class="form-page">
+
+        <div class="form-container">
+
+            <a href="/" class="back-link">← Voltar para o dashboard</a>
+
+            <div class="form-header">
+
+                <span class="form-icon">🏹</span>
+
+                <div>
+                    <h1>Adicionar vaga</h1>
+
+                    <p>
+                        Cadastre uma oportunidade para acompanhar no Job Hunter.
+                    </p>
+                </div>
+
+            </div>
+
+            <form method="POST" class="job-form">
+
+                <div class="form-group">
+
+                    <label for="titulo">Título da vaga</label>
+
+                    <input
+                        type="text"
+                        id="titulo"
+                        name="titulo"
+                        placeholder="Ex: Desenvolvedor Python Júnior"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="empresa">Empresa</label>
+
+                    <input
+                        type="text"
+                        id="empresa"
+                        name="empresa"
+                        placeholder="Ex: Empresa Tech"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="local">Local</label>
+
+                        <input
+                            type="text"
+                            id="local"
+                            name="local"
+                            placeholder="Ex: São Paulo - SP"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="modelo">Modelo</label>
+
+                        <select id="modelo" name="modelo">
+
+                            <option value="Remoto">Remoto</option>
+                            <option value="Híbrido">Híbrido</option>
+                            <option value="Presencial">Presencial</option>
+
+                        </select>
+
+                    </div>
+<div class="form-group">
+
+    <label for="habilidades">
+        Habilidades
+    </label>
+
+    <input
+        type="text"
+        id="habilidades"
+        name="habilidades"
+        placeholder="Ex: Python, SQL, Git, Docker"
+        required
+    >
+
+    <small>
+        Separe as habilidades por vírgulas.
+    </small>
+
+</div>
+                </div>
+
+
+                
+
+
+                <div class="form-group">
+
+                    <label for="link">Link da vaga</label>
+
+                    <input
+                        type="url"
+                        id="link"
+                        name="link"
+                        placeholder="https://..."
+                        required
+                    >
+
+                </div>
+
+
+                <button type="submit" class="form-submit">
+                    Adicionar vaga
+                </button>
+
+            </form>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>
