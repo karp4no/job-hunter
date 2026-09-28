@@ -23,6 +23,10 @@
 
     <div class="header-actions">
 
+        <a href="/buscar-vagas" class="search-job-button">
+            🔎 Buscar vagas
+        </a>
+
         <a href="/adicionar-vaga" class="add-job-button">
             + Adicionar vaga
         </a>
@@ -39,6 +43,12 @@
 
 
     <main class="container">
+
+        {% if request.args.get("aviso") %}
+        <div class="notice">
+            {{ request.args.get("aviso") }}
+        </div>
+        {% endif %}
 
         <section class="welcome">
 
@@ -59,13 +69,23 @@
             </div>
 
             <div class="stat-card">
-                <span class="stat-number">{{ vagas_compativeis }}</span>
-                <span class="stat-label">Compatíveis</span>
+                <span class="stat-number">{{ status_contagem["Nova"] }}</span>
+                <span class="stat-label">Novas</span>
             </div>
 
             <div class="stat-card">
-                <span class="stat-number">{{ vagas_revisar }}</span>
-                <span class="stat-label">Para revisar</span>
+                <span class="stat-number">{{ status_contagem["Candidatura enviada"] }}</span>
+                <span class="stat-label">Candidaturas</span>
+            </div>
+
+            <div class="stat-card">
+                <span class="stat-number">{{ status_contagem["Entrevista"] }}</span>
+                <span class="stat-label">Entrevistas</span>
+            </div>
+
+            <div class="stat-card">
+                <span class="stat-number">{{ status_contagem["Contratado"] }}</span>
+                <span class="stat-label">Contratados</span>
             </div>
 
         </section>
@@ -96,6 +116,19 @@
     <option value="híbrido">Híbrido</option>
     <option value="presencial">Presencial</option>
 </select>
+
+<label for="filtro-status">
+    Status:
+</label>
+
+<select id="filtro-status">
+    <option value="todos">Todos</option>
+    <option value="nova">Nova</option>
+    <option value="candidatura enviada">Candidatura enviada</option>
+    <option value="entrevista">Entrevista</option>
+    <option value="recusada">Recusada</option>
+    <option value="contratado">Contratado</option>
+</select>
 </div>
 <div
     id="nenhuma-vaga"
@@ -105,8 +138,8 @@
     <strong>Nenhuma vaga encontrada</strong>
 
     <p>
-        Não há vagas com esse nível de compatibilidade.
-        Tente selecionar um filtro diferente.
+        Nenhuma vaga corresponde aos filtros selecionados.
+        Tente alterar os filtros e tente novamente.
     </p>
 </div>
            {% for vaga in vagas %}
@@ -114,6 +147,7 @@
 <article
     class="job-card"
     data-compatibilidade="{{ vaga.compatibilidade }}"
+    data-status="{{ vaga.status|lower }}"
 >
     <div class="job-info">
 
@@ -192,19 +226,74 @@
 
 </div>
 
-    <a
-    href="{{ vaga.link }}"
-    class="job-button"
-    target="_blank"
->
-    Ver vaga
-</a>
+    <div class="job-actions">
+
+        <a
+            href="{{ vaga.link }}"
+            class="job-button"
+            target="_blank"
+        >
+            Ver vaga
+        </a>
+
+        <form
+            method="POST"
+            action="/vaga/{{ vaga.id }}/status"
+            class="status-form"
+        >
+
+            <select
+                name="status"
+                onchange="this.form.submit()"
+            >
+
+                <option value="Nova"
+                    {% if vaga.status == "Nova" %}selected{% endif %}>
+                    🆕 Nova
+                </option>
+
+                <option value="Candidatura enviada"
+                    {% if vaga.status == "Candidatura enviada" %}selected{% endif %}>
+                    📤 Candidatura enviada
+                </option>
+
+                <option value="Entrevista"
+                    {% if vaga.status == "Entrevista" %}selected{% endif %}>
+                    📅 Entrevista
+                </option>
+
+                <option value="Recusada"
+                    {% if vaga.status == "Recusada" %}selected{% endif %}>
+                    ❌ Recusada
+                </option>
+
+                <option value="Contratado"
+                    {% if vaga.status == "Contratado" %}selected{% endif %}>
+                    ✅ Contratado
+                </option>
+
+            </select>
+
+        </form>
+
+    </div>
 
 </article>
 
 {% endfor %}
 
         </section>
+
+        <p class="source-note">
+            Buscas automáticas fornecidas por
+            <a
+                href="https://remotive.com"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                Remotive
+            </a>.
+        </p>
 
     </main>
 <div class="modal">

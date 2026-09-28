@@ -6,17 +6,27 @@ const filtroModelo = document.getElementById(
     "filtro-modelo"
 );
 
+const filtroStatus = document.getElementById(
+    "filtro-status"
+);
+
 const vagas = document.querySelectorAll(".job-card");
 const nenhumaVaga = document.getElementById("nenhuma-vaga");
 
 
 function aplicarFiltros() {
 
-    const minimo = Number(
-        filtroCompatibilidade.value
-    );
+    const minimo = filtroCompatibilidade
+        ? Number(filtroCompatibilidade.value)
+        : 0;
 
-    const modeloSelecionado = filtroModelo.value;
+    const modeloSelecionado = filtroModelo
+        ? filtroModelo.value.toLowerCase()
+        : "todos";
+
+    const statusSelecionado = filtroStatus
+        ? filtroStatus.value.toLowerCase()
+        : "todos";
 
     let vagasVisiveis = 0;
 
@@ -24,29 +34,41 @@ function aplicarFiltros() {
     vagas.forEach(function (vaga) {
 
         const compatibilidade = Number(
-            vaga.dataset.compatibilidade
+            vaga.dataset.compatibilidade || 0
         );
 
-        const modelo = vaga
+        const modeloTexto = vaga
             .querySelector(".location")
-            .textContent
+            ?.textContent
             .split("•")[1]
             ?.trim()
-            .toLowerCase();
+            .toLowerCase() || "";
+
+        const statusElement = vaga.querySelector(
+            ".status-form select"
+        );
+
+        const status = statusElement
+            ? statusElement.value.trim().toLowerCase()
+            : "nova";
 
 
         const correspondeCompatibilidade =
             compatibilidade >= minimo;
 
-
         const correspondeModelo =
             modeloSelecionado === "todos" ||
-            modelo === modeloSelecionado;
+            modeloTexto === modeloSelecionado;
+
+        const correspondeStatus =
+            statusSelecionado === "todos" ||
+            status === statusSelecionado;
 
 
         if (
             correspondeCompatibilidade &&
-            correspondeModelo
+            correspondeModelo &&
+            correspondeStatus
         ) {
 
             vaga.style.display = "";
@@ -63,11 +85,10 @@ function aplicarFiltros() {
 
     if (nenhumaVaga) {
 
-        if (vagasVisiveis === 0) {
-            nenhumaVaga.style.display = "block";
-        } else {
-            nenhumaVaga.style.display = "none";
-        }
+        nenhumaVaga.style.display =
+            vagasVisiveis === 0
+                ? "block"
+                : "none";
 
     }
 
@@ -75,20 +96,27 @@ function aplicarFiltros() {
 
 
 if (filtroCompatibilidade) {
-
     filtroCompatibilidade.addEventListener(
         "change",
         aplicarFiltros
     );
-
 }
 
 
 if (filtroModelo) {
-
     filtroModelo.addEventListener(
         "change",
         aplicarFiltros
     );
-
 }
+
+
+if (filtroStatus) {
+    filtroStatus.addEventListener(
+        "change",
+        aplicarFiltros
+    );
+}
+
+
+aplicarFiltros();

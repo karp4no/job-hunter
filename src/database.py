@@ -1,6 +1,7 @@
 import sqlite3
 from pathlib import Path
 
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 BANCO = BASE_DIR / "data" / "job_hunter.db"
 
@@ -36,14 +37,9 @@ def adicionar_coluna_habilidades():
     cursor = conexao.cursor()
 
     cursor.execute("PRAGMA table_info(vagas)")
-
-    colunas = [
-        coluna[1]
-        for coluna in cursor.fetchall()
-    ]
+    colunas = [coluna[1] for coluna in cursor.fetchall()]
 
     if "habilidades" not in colunas:
-
         cursor.execute("""
             ALTER TABLE vagas
             ADD COLUMN habilidades TEXT
@@ -58,24 +54,35 @@ def adicionar_colunas_analise():
     cursor = conexao.cursor()
 
     cursor.execute("PRAGMA table_info(vagas)")
-
-    colunas = [
-        coluna[1]
-        for coluna in cursor.fetchall()
-    ]
+    colunas = [coluna[1] for coluna in cursor.fetchall()]
 
     if "habilidades_encontradas" not in colunas:
-
         cursor.execute("""
             ALTER TABLE vagas
             ADD COLUMN habilidades_encontradas TEXT
         """)
 
     if "habilidades_faltantes" not in colunas:
-
         cursor.execute("""
             ALTER TABLE vagas
             ADD COLUMN habilidades_faltantes TEXT
+        """)
+
+    conexao.commit()
+    conexao.close()
+
+
+def adicionar_coluna_status():
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("PRAGMA table_info(vagas)")
+    colunas = [coluna[1] for coluna in cursor.fetchall()]
+
+    if "status" not in colunas:
+        cursor.execute("""
+            ALTER TABLE vagas
+            ADD COLUMN status TEXT DEFAULT 'Nova'
         """)
 
     conexao.commit()
@@ -97,18 +104,17 @@ def buscar_vagas():
             compatibilidade,
             habilidades_encontradas,
             habilidades_faltantes,
-            link
+            link,
+            status
         FROM vagas
     """)
 
     resultados = cursor.fetchall()
-
     conexao.close()
 
     vagas = []
 
     for vaga in resultados:
-
         vagas.append({
             "id": vaga[0],
             "titulo": vaga[1],
@@ -119,7 +125,8 @@ def buscar_vagas():
             "compatibilidade": vaga[6],
             "habilidades_encontradas": vaga[7],
             "habilidades_faltantes": vaga[8],
-            "link": vaga[9]
+            "link": vaga[9],
+            "status": vaga[10]
         })
 
     return vagas
@@ -136,7 +143,6 @@ def adicionar_vaga(
     habilidades_faltantes,
     link
 ):
-
     conexao = conectar()
     cursor = conexao.cursor()
 
@@ -164,6 +170,35 @@ def adicionar_vaga(
         habilidades_faltantes,
         link
     ))
+
+    conexao.commit()
+    conexao.close()
+
+
+def vaga_existe(link):
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute(
+        "SELECT id FROM vagas WHERE link = ? LIMIT 1",
+        (link,)
+    )
+
+    resultado = cursor.fetchone()
+    conexao.close()
+
+    return resultado is not None
+
+
+def atualizar_status_vaga(vaga_id, status):
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        UPDATE vagas
+        SET status = ?
+        WHERE id = ?
+    """, (status, vaga_id))
 
     conexao.commit()
     conexao.close()
@@ -205,7 +240,6 @@ def buscar_perfil():
     """)
 
     resultado = cursor.fetchone()
-
     conexao.close()
 
     if resultado is None:
@@ -228,16 +262,13 @@ def salvar_perfil(
     experiencia,
     objetivo
 ):
-
     conexao = conectar()
     cursor = conexao.cursor()
 
     cursor.execute("SELECT id FROM perfil LIMIT 1")
-
     perfil_existente = cursor.fetchone()
 
     if perfil_existente:
-
         cursor.execute("""
             UPDATE perfil
             SET
@@ -257,7 +288,6 @@ def salvar_perfil(
         ))
 
     else:
-
         cursor.execute("""
             INSERT INTO perfil (
                 nome,
