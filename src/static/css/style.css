@@ -38,7 +38,25 @@ body {
     border-radius: 8px;
     cursor: pointer;
 }
+.header-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
 
+.add-job-button {
+    border: 1px solid #ddd;
+    background: #ffffff;
+    padding: 9px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+}
+
+.add-job-button:hover {
+    opacity: 0.8;
+}
 /* Conteúdo */
 
 .container {
