@@ -4,6 +4,9 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 BANCO = BASE_DIR / "data" / "job_hunter.db"
 
+BANCO.parent.mkdir(parents=True, exist_ok=True)
+
+
 def conectar():
     return sqlite3.connect(BANCO)
 
